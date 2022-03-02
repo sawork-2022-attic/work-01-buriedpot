@@ -1,5 +1,7 @@
 package asciiPanel;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -93,7 +95,7 @@ public class AsciiPanel extends JPanel {
      * A brighter cyan.
      */
     public static Color brightCyan = new Color(0, 255, 255);
-    
+
     /**
      * A brighter white (pure white).
      */
@@ -118,6 +120,8 @@ public class AsciiPanel extends JPanel {
     private char[][] oldChars;
     private Color[][] oldBackgroundColors;
     private Color[][] oldForegroundColors;
+
+
     private AsciiFont asciiFont;
 
     /**
@@ -257,6 +261,7 @@ public class AsciiPanel extends JPanel {
      * as the panel dimensions will most likely change
      * @param font
      */
+    @Autowired
     public void setAsciiFont(AsciiFont font)
     {
         if(this.asciiFont == font)
@@ -298,7 +303,7 @@ public class AsciiPanel extends JPanel {
     public AsciiPanel(int width, int height) {
     	this(width, height, null);
     }
-    
+
     /**
      * Class constructor specifying the width and height in characters and the AsciiFont
      * @param width
@@ -334,11 +339,11 @@ public class AsciiPanel extends JPanel {
         }
         setAsciiFont(font);
     }
-    
+
     @Override
     public void update(Graphics g) {
-         paint(g); 
-    } 
+         paint(g);
+    }
 
     @Override
     public void paint(Graphics g) {
@@ -351,20 +356,20 @@ public class AsciiPanel extends JPanel {
             	 && oldForegroundColors[x][y] == foregroundColors[x][y]
             	 && oldChars[x][y] == chars[x][y])
             		continue;
-            	
+
                 Color bg = backgroundColors[x][y];
                 Color fg = foregroundColors[x][y];
 
                 LookupOp op = setColors(bg, fg);
                 BufferedImage img = op.filter(glyphs[chars[x][y]], null);
                 offscreenGraphics.drawImage(img, x * charWidth, y * charHeight, null);
-                
+
                 oldBackgroundColors[x][y] = backgroundColors[x][y];
         	    oldForegroundColors[x][y] = foregroundColors[x][y];
         	    oldChars[x][y] = chars[x][y];
             }
         }
-        
+
         g.drawImage(offscreenBuffer,0,0,this);
     }
 
@@ -383,10 +388,10 @@ public class AsciiPanel extends JPanel {
             glyphs[i].getGraphics().drawImage(glyphSprite, 0, 0, charWidth, charHeight, sx, sy, sx + charWidth, sy + charHeight, null);
         }
     }
-        
+
     /**
-     * Create a <code>LookupOp</code> object (lookup table) mapping the original 
-     * pixels to the background and foreground colors, respectively. 
+     * Create a <code>LookupOp</code> object (lookup table) mapping the original
+     * pixels to the background and foreground colors, respectively.
      * @param bgColor the background color
      * @param fgColor the foreground color
      * @return the <code>LookupOp</code> object (lookup table)
@@ -770,7 +775,7 @@ public class AsciiPanel extends JPanel {
     public AsciiPanel write(String string, int x, int y, Color foreground, Color background) {
         if (string == null)
             throw new NullPointerException("string must not be null." );
-        
+
         if (x + string.length() > widthInCharacters)
             throw new IllegalArgumentException("x + string.length() " + (x + string.length()) + " must be less than " + widthInCharacters + "." );
 
@@ -854,7 +859,7 @@ public class AsciiPanel extends JPanel {
             throw new IllegalArgumentException("string.length() " + string.length() + " must be less than " + widthInCharacters + "." );
 
         int x = (widthInCharacters - string.length()) / 2;
-        
+
         if (y < 0 || y >= heightInCharacters)
             throw new IllegalArgumentException("y " + y + " must be within range [0," + heightInCharacters + ")." );
 
@@ -869,28 +874,28 @@ public class AsciiPanel extends JPanel {
         }
         return this;
     }
-    
+
     public void withEachTile(TileTransformer transformer){
 		withEachTile(0, 0, widthInCharacters, heightInCharacters, transformer);
     }
-    
+
     public void withEachTile(int left, int top, int width, int height, TileTransformer transformer){
 		AsciiCharacterData data = new AsciiCharacterData();
-		
+
     	for (int x0 = 0; x0 < width; x0++)
     	for (int y0 = 0; y0 < height; y0++){
     		int x = left + x0;
     		int y = top + y0;
-    		
+
     		if (x < 0 || y < 0 || x >= widthInCharacters || y >= heightInCharacters)
     			continue;
-    		
+
     		data.character = chars[x][y];
     		data.foregroundColor = foregroundColors[x][y];
     		data.backgroundColor = backgroundColors[x][y];
-    		
+
     		transformer.transformTile(x, y, data);
-    		
+
     		chars[x][y] = data.character;
     		foregroundColors[x][y] = data.foregroundColor;
     		backgroundColors[x][y] = data.backgroundColor;

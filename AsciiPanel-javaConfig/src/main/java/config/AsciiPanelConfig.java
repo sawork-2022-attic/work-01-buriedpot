@@ -13,49 +13,28 @@ public class AsciiPanelConfig {
 
     @Bean
     @Scope("prototype")
-    public AsciiPanel asciiPanel(@Value("80") int width, @Value("24")int height) {
-        return new AsciiPanel(width, height, asciiFont_CP437_9x16());
-    }
-
-
-
-    @Bean
-    public AsciiFont asciiFont_CP437_8x8() {
-        return AsciiFont.CP437_8x8;
-    }
-    @Bean
-    public AsciiFont asciiFont_CP437_10x10() {
-        return AsciiFont.CP437_10x10;
-    }
-    @Bean
-    public AsciiFont asciiFont_CP437_12x12() {
-        return AsciiFont.CP437_12x12;
-    }
-    @Bean
-    public AsciiFont asciiFont_CP437_16x16() {
-        return AsciiFont.CP437_16x16;
+    public AsciiPanel asciiPanel() {
+        return new AsciiPanel();
     }
 
     @Bean
-    public AsciiFont asciiFont_CP437_9x16() {
-        return AsciiFont.CP437_9x16;
+    public AsciiFont asciiFont() {
+        return new AsciiFont();
     }
+
     @Bean
-    public AsciiFont asciiFont_DRAKE_10x10() {
-        return AsciiFont.DRAKE_10x10;
+    public int width() {
+        return 9;
     }
-    @Bean
-    public AsciiFont asciiFont_TAFFER_10x10() {
-        return AsciiFont.TAFFER_10x10;
+
+    @Bean int height() {
+        return 16;
     }
-    @Bean
-    public AsciiFont asciiFont_QBICFEET_10x10() {
-        return AsciiFont.QBICFEET_10x10;
+    @Bean String fontFilename() {
+        return "cp437_9x16.png";
     }
-    @Bean
-    public AsciiFont asciiFont_TALRYTH_15_15() {
-        return AsciiFont.TALRYTH_15_15;
-    }
+
+
 
 
 }

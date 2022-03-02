@@ -1,9 +1,11 @@
 package asciiPanel;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 /**
  * This class holds provides all available Fonts for the AsciiPanel.
  * Some graphics are from the Dwarf Fortress Tileset Wiki Page
- * 
+ *
  * @author zn80
  *
  */
@@ -18,19 +20,22 @@ public class AsciiFont {
 	public static final AsciiFont TAFFER_10x10 = new AsciiFont("taffer_10x10.png", 10, 10);
 	public static final AsciiFont QBICFEET_10x10 = new AsciiFont("qbicfeet_10x10.png", 10, 10);
 	public static final AsciiFont TALRYTH_15_15 = new AsciiFont("talryth_square_15x15.png", 15, 15);
-	
+
+	@Autowired
 	private String fontFilename;
 
 	public String getFontFilename() {
 		return fontFilename;
 	}
 
+	@Autowired
 	private int width;
 
 	public int getWidth() {
 		return width;
 	}
 
+	@Autowired
 	private int height;
 
 	public int getHeight() {
@@ -41,5 +46,9 @@ public class AsciiFont {
 		this.fontFilename = filename;
 		this.width = width;
 		this.height = height;
+	}
+
+	public AsciiFont() {
+		super();
 	}
 }
